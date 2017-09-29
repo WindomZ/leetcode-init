@@ -1,10 +1,10 @@
 package leetcode
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -14,17 +14,14 @@ import (
 
 // Problem the struct of leetcode problem.
 type Problem struct {
-	Index       int
-	URL         string
-	Short       string
-	Name        string
-	Description string
-	Difficulty  string
+	Question
+	Description string `json:"description"`
+	Difficulty  string `json:"difficulty"`
 }
 
 // Parse parses URL and constructs.
 func (p *Problem) Parse() error {
-	if p.URL == "" && p.Short == "" {
+	if p.URL == "" && p.TitleSlug == "" {
 		return errors.New("can't find the problem")
 	}
 
@@ -32,35 +29,44 @@ func (p *Problem) Parse() error {
 	if p.URL == "" {
 		p.URL = fmt.Sprintf(
 			"https://leetcode.com/problems/%s/description/",
-			p.Short,
+			p.TitleSlug,
 		)
-	}
-
-	// Short
-	if p.Short == "" {
-		if strings.HasPrefix(p.URL, "https://leetcode.com/problems/") {
-			p.Short = p.URL[30:]
-			p.Short = strings.TrimSpace(p.Short[:strings.Index(p.Short, "/")])
-		}
 	}
 
 	doc, err := goquery.NewDocument(p.URL)
 	if err != nil {
 		return err
 	}
+	return p.parseDoc(doc)
+}
 
-	// Name
-	p.Name = doc.Find(".question-title .row h3").First().Text()
-	if p.Name != "" {
-		idx := strings.Index(p.Name, ".")
-		p.Index, _ = strconv.Atoi(strings.TrimSpace(p.Name[:idx]))
-		p.Name = strings.TrimSpace(p.Name[idx+1:])
+func (p *Problem) parseDoc(doc *goquery.Document) (err error) {
+	if err = p.Question.parseDoc(doc); err != nil {
+		return
+	}
+
+	// TitleSlug
+	if p.TitleSlug == "" {
+		if strings.HasPrefix(p.URL, "https://leetcode.com/problems/") {
+			p.TitleSlug = p.URL[30:]
+			p.TitleSlug = strings.TrimSpace(p.TitleSlug[:strings.Index(p.TitleSlug, "/")])
+		}
+	}
+
+	// Id & Title
+	if p.Title == "" {
+		p.Title = doc.Find(".question-title .row h3").First().Text()
+		if p.Title != "" {
+			idx := strings.Index(p.Title, ".")
+			p.Id = strings.TrimSpace(p.Title[:idx])
+			p.Title = strings.TrimSpace(p.Title[idx+1:])
+		}
 	}
 
 	// Description
 	p.Description, err = doc.Find("div.question-description").First().Html()
 	if err != nil {
-		return err
+		return
 	}
 	p.Description = strings.TrimSpace(p.Description)
 
@@ -68,20 +74,70 @@ func (p *Problem) Parse() error {
 	p.Difficulty = doc.Find("span.difficulty-label").First().Text()
 	p.Difficulty = strings.TrimSpace(p.Difficulty)
 
-	return nil
+	return
 }
 
 // ReadMe convert description to markdown.
-func (p *Problem) ReadMe() string {
+func (p Problem) ReadMe() string {
 	return html2md.Convert(p.Description)
 }
 
-// OutputReadMe save to README.md with dir path.
-func (p *Problem) OutputReadMe(dir string) error {
+func (p Problem) packageName() string {
+	return strings.ToLower(strings.Replace(p.TitleSlug, "-", "", -1))
+}
+
+func (p Problem) ensureDir() error {
+	return path.Ensure(filepath.Join(".", p.packageName()), true)
+}
+
+// OutputReadMe save to README.md.
+func (p Problem) OutputReadMe() error {
+	if err := p.ensureDir(); err != nil {
+		return err
+	}
 	return path.OverwriteFile(
-		filepath.Join(dir, "README.md"),
-		fmt.Sprintf("# %d. %s", p.Index, p.Name),
+		filepath.Join(".", p.packageName(), "README.md"),
+		fmt.Sprintf("# %s. %s", p.Id, p.Title),
 		"## description",
 		p.ReadMe(),
 	)
+}
+
+// OutputCode save to src code file with language.
+func (p Problem) OutputCode(lang string) error {
+	code := p.Codes.Code(lang)
+	if code == nil {
+		return errors.New("not found the language code")
+	}
+	if err := p.ensureDir(); err != nil {
+		return err
+	}
+	return code.outputCode(p.packageName(), lang)
+}
+
+// OutputTestCode save to test code file with language.
+func (p Problem) OutputTestCode(lang string) error {
+	code := p.Codes.Code(lang)
+	if code == nil {
+		return errors.New("not found the language code")
+	}
+	if err := p.ensureDir(); err != nil {
+		return err
+	}
+	return code.outputTestCode(p.packageName(), lang)
+}
+
+// String returns a string.
+func (p Problem) String() string {
+	b, _ := json.Marshal(p)
+	return string(b)
+}
+
+// NewProblem returns new Problem impl .
+func NewProblem(uri string) *Problem {
+	return &Problem{
+		Question: Question{
+			URL: uri,
+		},
+	}
 }

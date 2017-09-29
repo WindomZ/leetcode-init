@@ -3,11 +3,10 @@ package leetcode
 import (
 	"testing"
 
-	"github.com/WindomZ/go-develop-kit/path"
 	"github.com/WindomZ/testify/assert"
 )
 
-var testProblem = &Problem{URL: "https://leetcode.com/problems/two-sum/description/"}
+var testProblem = NewProblem("https://leetcode.com/problems/two-sum/description/")
 
 func TestProblem_Parse(t *testing.T) {
 	assert.NoError(t, testProblem.Parse())
@@ -18,6 +17,13 @@ func TestProblem_ReadMe(t *testing.T) {
 }
 
 func TestProblem_OutputReadMe(t *testing.T) {
-	assert.NoError(t, testProblem.OutputReadMe("."))
-	path.RemoveFile("README.md", false)
+	assert.NoError(t, testProblem.OutputReadMe())
+}
+
+func TestProblem_OutputCode(t *testing.T) {
+	assert.NoError(t, testProblem.OutputCode("go"))
+}
+
+func TestProblem_OutputTestCode(t *testing.T) {
+	assert.NoError(t, testProblem.OutputTestCode("go"))
 }
