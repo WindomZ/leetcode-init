@@ -5,6 +5,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"regexp"
+	"unicode"
+
 	"github.com/WindomZ/go-develop-kit/path"
 )
 
@@ -58,8 +61,14 @@ func (c Code) outputTestCode(packageName, lang string) error {
 	default:
 		return errors.New("not support the language")
 	}
+	testCode := regexp.MustCompile(`func (.+)\(`).
+		FindStringSubmatch(c.DefaultCode)[1]
+	if len(testCode) > 1 {
+		testCode = string(unicode.ToUpper(rune(testCode[0]))) + testCode[1:]
+	}
 	return path.OverwriteFile(
 		filepath.Join(".", packageName, fileName),
-		head, "",
+		head, "", `import "testing"`, "",
+		"func Test"+testCode+"(t *testing.T) {", "}",
 	)
 }
