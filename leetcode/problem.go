@@ -135,6 +135,8 @@ func (p Problem) String() string {
 
 // NewProblem returns new Problem instance with a url string.
 func NewProblem(uri string) *Problem {
+	uri = fmt.Sprintf("https://leetcode.com/problems/%s/description/",
+		mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri))
 	return &Problem{
 		Question: Question{
 			URL: uri,
@@ -144,6 +146,8 @@ func NewProblem(uri string) *Problem {
 
 // NewProblemByTitle returns new Problem instance with a title string.
 func NewProblemByTitle(title string) *Problem {
+	title = strings.Replace(strings.TrimSpace(strings.ToLower(title)),
+		" ", "-", -1)
 	return &Problem{
 		Question: Question{
 			TitleSlug: title,
