@@ -17,4 +17,4 @@ script:
   - diff -u <(echo -n) <(go vet ./...)
   - diff -u <(echo -n) <(golint ./...)
   - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -service=travis-ci
-  - go test -v ./leetcode/...
+  - go test -v ./leetcode
