@@ -2,6 +2,11 @@
 
 > A simple cli to creates leetcode code template.
 
+## Install
+```bash
+go get -u github.com/WindomZ/leetcode-init
+```
+
 ## Usage
 Take the first problem([1. Two Sum](https://leetcode.com/problems/two-sum/description/)) for example: 
 
