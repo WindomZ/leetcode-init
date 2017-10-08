@@ -58,7 +58,7 @@ func (p *Problem) parseDoc(doc *goquery.Document) (err error) {
 		p.Title = doc.Find(".question-title .row h3").First().Text()
 		if p.Title != "" {
 			idx := strings.Index(p.Title, ".")
-			p.Id = strings.TrimSpace(p.Title[:idx])
+			p.ID = strings.TrimSpace(p.Title[:idx])
 			p.Title = strings.TrimSpace(p.Title[idx+1:])
 		}
 	}
@@ -97,7 +97,7 @@ func (p Problem) OutputReadMe() error {
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", p.packageName(), "README.md"),
-		fmt.Sprintf("# %s. %s", p.Id, p.Title), "",
+		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
 		"## Description", "",
 		p.ReadMe(),
 	)

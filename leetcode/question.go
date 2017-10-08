@@ -11,7 +11,7 @@ import (
 // Question the struct of leetcode question.
 type Question struct {
 	URL            string `json:"url"`
-	Id             string `json:"id"`
+	ID             string `json:"id"`
 	TitleSlug      string `json:"title_slug"`
 	Title          string `json:"title"`
 	CodeDefinition string `json:"-"`
@@ -42,8 +42,8 @@ func (q *Question) parseDoc(doc *goquery.Document) error {
 		return fmt.Errorf("not found in '%s'", doc.Url.String())
 	}
 
-	// Id
-	q.Id = mustFindFirstStringSubmatch(`questionId: '(\d+)',`, pageData)
+	// ID
+	q.ID = mustFindFirstStringSubmatch(`questionId: '(\d+)',`, pageData)
 
 	// TitleSlug
 	q.TitleSlug = mustFindFirstStringSubmatch(`questionTitleSlug: '(.+)',`, pageData)
@@ -66,11 +66,7 @@ func (q *Question) parseCode() error {
 		`'`, `"`, -1)
 	q.CodeDefinition = q.CodeDefinition[:len(q.CodeDefinition)-2] + "]"
 
-	if err := json.Unmarshal([]byte(q.CodeDefinition), &q.Codes); err != nil {
-		return err
-	}
-
-	return nil
+	return json.Unmarshal([]byte(q.CodeDefinition), &q.Codes)
 }
 
 // String returns a string.

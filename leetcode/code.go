@@ -17,8 +17,10 @@ type Code struct {
 	DefaultCode string `json:"defaultCode"`
 }
 
+// Codes the slice of Code
 type Codes []*Code
 
+// Code get a Code by key string
 func (c Codes) Code(key string) *Code {
 	for _, code := range c {
 		if code.match(key) {
