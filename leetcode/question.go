@@ -2,7 +2,7 @@ package leetcode
 
 import (
 	"encoding/json"
-	"regexp"
+	"fmt"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -38,21 +38,21 @@ func (q *Question) parseDoc(doc *goquery.Document) error {
 		return true
 	})
 
+	if pageData == "" {
+		return fmt.Errorf("not found in '%s'", doc.Url.String())
+	}
+
 	// Id
-	q.Id = regexp.MustCompile(`questionId: '(\d+)',`).
-		FindStringSubmatch(pageData)[1]
+	q.Id = mustFindFirstStringSubmatch(`questionId: '(\d+)',`, pageData)
 
 	// TitleSlug
-	q.TitleSlug = regexp.MustCompile(`questionTitleSlug: '(.+)',`).
-		FindStringSubmatch(pageData)[1]
+	q.TitleSlug = mustFindFirstStringSubmatch(`questionTitleSlug: '(.+)',`, pageData)
 
 	// Title
-	q.Title = regexp.MustCompile(`questionTitle: '(.+)',`).
-		FindStringSubmatch(pageData)[1]
+	q.Title = mustFindFirstStringSubmatch(`questionTitle: '(.+)',`, pageData)
 
 	// CodeDefinition
-	q.CodeDefinition = regexp.MustCompile(`codeDefinition: (.+),`).
-		FindStringSubmatch(pageData)[1]
+	q.CodeDefinition = mustFindFirstStringSubmatch(`codeDefinition: (.+),`, pageData)
 
 	return q.parseCode()
 }
