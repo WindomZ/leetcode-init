@@ -12,20 +12,28 @@ const (
 )
 
 const (
-	usageTitle string = ""
-	usageURL          = ""
+	usageTitle string = "the title of leetcode problem, without the number."
+	usageURL          = "the url of leetcode problem."
+	usageHelp         = "prints a usage message documenting all defined command-line flags."
 )
 
 var (
 	titleFlag = flag.String("title", defaultTitle, usageTitle)
 	urlFlag   = flag.String("url", defaultURL, usageURL)
+	helpFlag  = flag.Bool("help", false, usageHelp)
 )
 
 func main() {
 	flag.StringVar(titleFlag, "t", defaultTitle, usageTitle)
 	flag.StringVar(urlFlag, "u", defaultURL, usageURL)
+	flag.BoolVar(helpFlag, "h", false, usageHelp)
 
 	flag.Parse()
+
+	if *helpFlag {
+		flag.Usage()
+		return
+	}
 
 	var problem *leetcode.Problem
 	if *urlFlag != "" {
