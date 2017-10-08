@@ -97,8 +97,8 @@ func (p Problem) OutputReadMe() error {
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", p.packageName(), "README.md"),
-		fmt.Sprintf("# %s. %s", p.Id, p.Title),
-		"## description",
+		fmt.Sprintf("# %s. %s", p.Id, p.Title), "",
+		"## Description", "",
 		p.ReadMe(),
 	)
 }
@@ -133,7 +133,7 @@ func (p Problem) String() string {
 	return string(b)
 }
 
-// NewProblem returns new Problem impl .
+// NewProblem returns new Problem impl.
 func NewProblem(uri string) *Problem {
 	return &Problem{
 		Question: Question{

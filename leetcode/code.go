@@ -3,9 +3,8 @@ package leetcode
 import (
 	"errors"
 	"path/filepath"
-	"strings"
-
 	"regexp"
+	"strings"
 	"unicode"
 
 	"github.com/WindomZ/go-develop-kit/path"

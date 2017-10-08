@@ -79,7 +79,7 @@ func (q Question) String() string {
 	return string(b)
 }
 
-// NewQuestion returns new Question impl .
+// NewQuestion returns new Question impl.
 func NewQuestion(uri string) *Question {
 	return &Question{
 		URL: uri,
