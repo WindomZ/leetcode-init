@@ -133,11 +133,20 @@ func (p Problem) String() string {
 	return string(b)
 }
 
-// NewProblem returns new Problem impl.
+// NewProblem returns new Problem instance with a url string.
 func NewProblem(uri string) *Problem {
 	return &Problem{
 		Question: Question{
 			URL: uri,
+		},
+	}
+}
+
+// NewProblemByTitle returns new Problem instance with a title string.
+func NewProblemByTitle(title string) *Problem {
+	return &Problem{
+		Question: Question{
+			TitleSlug: title,
 		},
 	}
 }
