@@ -2,6 +2,8 @@
 
 > A simple cli to creates leetcode code template.
 
+[![Build Status](https://travis-ci.org/WindomZ/leetcode-init.svg?branch=master)](https://travis-ci.org/WindomZ/leetcode-init)
+
 ## Install
 ```bash
 go get -u github.com/WindomZ/leetcode-init
