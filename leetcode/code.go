@@ -42,7 +42,7 @@ func (c Code) outputCode(packageName, lang string) error {
 		fileName = packageName + ".go"
 		head = "package " + packageName
 	default:
-		return errors.New("not support the language")
+		return errors.New("not support the language: " + lang)
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", packageName, fileName),
@@ -58,7 +58,7 @@ func (c Code) outputTestCode(packageName, lang string) error {
 		fileName = packageName + "_test.go"
 		head = "package " + packageName
 	default:
-		return errors.New("not support the language")
+		return errors.New("not support the language: " + lang)
 	}
 	testCode := regexp.MustCompile(`func (.+)\(`).
 		FindStringSubmatch(c.DefaultCode)[1]
