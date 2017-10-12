@@ -82,12 +82,16 @@ func (p Problem) ReadMe() string {
 	return html2md.Convert(p.Description)
 }
 
+func (p Problem) fileName() string {
+	return strings.ToLower(strings.Replace(p.TitleSlug, "-", "_", -1))
+}
+
 func (p Problem) packageName() string {
 	return strings.ToLower(strings.Replace(p.TitleSlug, "-", "", -1))
 }
 
 func (p Problem) ensureDir() error {
-	return path.Ensure(filepath.Join(".", p.packageName()), true)
+	return path.Ensure(filepath.Join(".", p.fileName()), true)
 }
 
 // OutputReadMe save to README.md.
@@ -96,7 +100,7 @@ func (p Problem) OutputReadMe() error {
 		return err
 	}
 	return path.OverwriteFile(
-		filepath.Join(".", p.packageName(), "README.md"),
+		filepath.Join(".", p.fileName(), "README.md"),
 		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
 		"## Description", "",
 		p.ReadMe(),
