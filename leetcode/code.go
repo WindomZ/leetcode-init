@@ -34,7 +34,7 @@ func (c Code) match(key string) bool {
 		strings.ToLower(c.Text) == key
 }
 
-func (c Code) outputCode(packageName, lang string) error {
+func (c Code) outputCode(dirName, packageName, lang string) error {
 	var fileName string
 	var head string
 	switch strings.ToLower(lang) {
@@ -45,12 +45,12 @@ func (c Code) outputCode(packageName, lang string) error {
 		return errors.New("not support the language: " + lang)
 	}
 	return path.OverwriteFile(
-		filepath.Join(".", packageName, fileName),
+		filepath.Join(".", dirName, fileName),
 		head, "", c.DefaultCode,
 	)
 }
 
-func (c Code) outputTestCode(packageName, lang string) error {
+func (c Code) outputTestCode(dirName, packageName, lang string) error {
 	var fileName string
 	var head string
 	switch strings.ToLower(lang) {
@@ -61,7 +61,7 @@ func (c Code) outputTestCode(packageName, lang string) error {
 		return errors.New("not support the language: " + lang)
 	}
 	return path.OverwriteFile(
-		filepath.Join(".", packageName, fileName),
+		filepath.Join(".", dirName, fileName),
 		head, "", `import "testing"`, "",
 		"func Test_"+mustFindFirstStringSubmatch(`func (.+)\(`,
 			c.DefaultCode)+"(t *testing.T) {", "}",

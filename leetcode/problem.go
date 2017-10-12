@@ -82,7 +82,7 @@ func (p Problem) ReadMe() string {
 	return html2md.Convert(p.Description)
 }
 
-func (p Problem) fileName() string {
+func (p Problem) dirName() string {
 	return strings.ToLower(strings.Replace(p.TitleSlug, "-", "_", -1))
 }
 
@@ -91,7 +91,7 @@ func (p Problem) packageName() string {
 }
 
 func (p Problem) ensureDir() error {
-	return path.Ensure(filepath.Join(".", p.fileName()), true)
+	return path.Ensure(filepath.Join(".", p.dirName()), true)
 }
 
 // OutputReadMe save to README.md.
@@ -100,7 +100,7 @@ func (p Problem) OutputReadMe() error {
 		return err
 	}
 	return path.OverwriteFile(
-		filepath.Join(".", p.fileName(), "README.md"),
+		filepath.Join(".", p.dirName(), "README.md"),
 		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
 		"## Description", "",
 		p.ReadMe(),
@@ -116,7 +116,7 @@ func (p Problem) OutputCode(lang string) error {
 	if err := p.ensureDir(); err != nil {
 		return err
 	}
-	return code.outputCode(p.packageName(), lang)
+	return code.outputCode(p.dirName(), p.packageName(), lang)
 }
 
 // OutputTestCode save to test code file with language.
@@ -128,7 +128,7 @@ func (p Problem) OutputTestCode(lang string) error {
 	if err := p.ensureDir(); err != nil {
 		return err
 	}
-	return code.outputTestCode(p.packageName(), lang)
+	return code.outputTestCode(p.dirName(), p.packageName(), lang)
 }
 
 // String returns a string.
