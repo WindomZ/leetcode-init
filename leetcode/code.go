@@ -34,15 +34,15 @@ func (c Code) match(key string) bool {
 		strings.ToLower(c.Text) == key
 }
 
-func (c Code) outputCode(dirName, packageName, lang string) error {
+func (c Code) outputCode(dirName, packageName string, lang LanguageType) error {
 	var fileName string
 	var head string
-	switch strings.ToLower(lang) {
-	case "golang", "go":
+	switch lang {
+	case LanguageGo:
 		fileName = packageName + ".go"
 		head = "package " + packageName
 	default:
-		return errors.New("not support the language: " + lang)
+		return errors.New("not support the language: " + lang.String())
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", dirName, fileName),
@@ -50,15 +50,15 @@ func (c Code) outputCode(dirName, packageName, lang string) error {
 	)
 }
 
-func (c Code) outputTestCode(dirName, packageName, lang string) error {
+func (c Code) outputTestCode(dirName, packageName string, lang LanguageType) error {
 	var fileName string
 	var head string
-	switch strings.ToLower(lang) {
-	case "golang", "go":
+	switch lang {
+	case LanguageGo:
 		fileName = packageName + "_test.go"
 		head = "package " + packageName
 	default:
-		return errors.New("not support the language: " + lang)
+		return errors.New("not support the language: " + lang.String())
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", dirName, fileName),

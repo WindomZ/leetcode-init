@@ -12,9 +12,23 @@ import (
 	"github.com/lunny/html2md"
 )
 
+// LanguageType type of language
+type LanguageType string
+
+// String returns a string
+func (l LanguageType) String() string {
+	return string(l)
+}
+
+const (
+	// golang language
+	LanguageGo LanguageType = "go"
+)
+
 // Problem the struct of leetcode problem.
 type Problem struct {
 	Question
+	Language    LanguageType
 	Description string `json:"description"`
 	Difficulty  string `json:"difficulty"`
 }
@@ -99,6 +113,9 @@ func (p Problem) OutputReadMe() error {
 	if err := p.ensureDir(); err != nil {
 		return err
 	}
+	if p.ID == "" || p.Title == "" {
+		return errors.New("not found the language description")
+	}
 	return path.OverwriteFile(
 		filepath.Join(".", p.dirName(), "README.md"),
 		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
@@ -108,27 +125,27 @@ func (p Problem) OutputReadMe() error {
 }
 
 // OutputCode save to src code file with language.
-func (p Problem) OutputCode(lang string) error {
-	code := p.Codes.Code(lang)
+func (p Problem) OutputCode() error {
+	code := p.Codes.Code(p.Language.String())
 	if code == nil {
 		return errors.New("not found the language code")
 	}
 	if err := p.ensureDir(); err != nil {
 		return err
 	}
-	return code.outputCode(p.dirName(), p.packageName(), lang)
+	return code.outputCode(p.dirName(), p.packageName(), p.Language)
 }
 
 // OutputTestCode save to test code file with language.
-func (p Problem) OutputTestCode(lang string) error {
-	code := p.Codes.Code(lang)
+func (p Problem) OutputTestCode() error {
+	code := p.Codes.Code(p.Language.String())
 	if code == nil {
 		return errors.New("not found the language code")
 	}
 	if err := p.ensureDir(); err != nil {
 		return err
 	}
-	return code.outputTestCode(p.dirName(), p.packageName(), lang)
+	return code.outputTestCode(p.dirName(), p.packageName(), p.Language)
 }
 
 // String returns a string.
@@ -138,23 +155,24 @@ func (p Problem) String() string {
 }
 
 // NewProblem returns new Problem instance with a url string.
-func NewProblem(uri string) *Problem {
-	uri = fmt.Sprintf("https://leetcode.com/problems/%s/description/",
-		mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri))
+func NewProblem(lang LanguageType, uri string) *Problem {
 	return &Problem{
 		Question: Question{
-			URL: uri,
+			URL: fmt.Sprintf("https://leetcode.com/problems/%s/description/",
+				mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri)),
 		},
+		Language: lang,
 	}
 }
 
 // NewProblemByTitle returns new Problem instance with a title string.
-func NewProblemByTitle(title string) *Problem {
+func NewProblemByTitle(lang LanguageType, title string) *Problem {
 	title = strings.Replace(strings.TrimSpace(strings.ToLower(title)),
 		" ", "-", -1)
 	return &Problem{
 		Question: Question{
 			TitleSlug: title,
 		},
+		Language: lang,
 	}
 }

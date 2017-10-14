@@ -37,9 +37,9 @@ func main() {
 
 	var problem *leetcode.Problem
 	if *urlFlag != "" {
-		problem = leetcode.NewProblem(*urlFlag)
+		problem = leetcode.NewProblem(leetcode.LanguageGo, *urlFlag)
 	} else if *titleFlag != "" {
-		problem = leetcode.NewProblemByTitle(*titleFlag)
+		problem = leetcode.NewProblemByTitle(leetcode.LanguageGo, *titleFlag)
 	} else {
 		flag.Usage()
 		return
@@ -52,10 +52,10 @@ func main() {
 	if err := problem.OutputReadMe(); err != nil {
 		panic(err)
 	}
-	if err := problem.OutputCode("go"); err != nil {
+	if err := problem.OutputCode(); err != nil {
 		panic(err)
 	}
-	if err := problem.OutputTestCode("go"); err != nil {
+	if err := problem.OutputTestCode(); err != nil {
 		panic(err)
 	}
 }

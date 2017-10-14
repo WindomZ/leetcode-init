@@ -6,7 +6,8 @@ import (
 	"github.com/WindomZ/testify/assert"
 )
 
-var testProblem = NewProblem("https://leetcode.com/problems/two-sum/description/")
+var testProblem = NewProblem(LanguageGo,
+	"https://leetcode.com/problems/two-sum/description/")
 
 func TestProblem_Parse(t *testing.T) {
 	assert.NoError(t, testProblem.Parse())
@@ -21,9 +22,9 @@ func TestProblem_OutputReadMe(t *testing.T) {
 }
 
 func TestProblem_OutputCode(t *testing.T) {
-	assert.NoError(t, testProblem.OutputCode("go"))
+	assert.NoError(t, testProblem.OutputCode())
 }
 
 func TestProblem_OutputTestCode(t *testing.T) {
-	assert.NoError(t, testProblem.OutputTestCode("go"))
+	assert.NoError(t, testProblem.OutputTestCode())
 }
