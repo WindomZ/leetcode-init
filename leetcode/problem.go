@@ -126,26 +126,26 @@ func (p Problem) OutputReadMe() error {
 
 // OutputCode save to src code file with language.
 func (p Problem) OutputCode() error {
-	code := p.Codes.Code(p.Language.String())
-	if code == nil {
-		return errors.New("not found the language code")
-	}
-	if err := p.ensureDir(); err != nil {
+	code, err := p.Codes.Code(p.Language)
+	if err != nil {
 		return err
 	}
-	return code.outputCode(p.dirName(), p.packageName(), p.Language)
+	if err = p.ensureDir(); err != nil {
+		return err
+	}
+	return code.outputCode(p.dirName(), p.packageName())
 }
 
 // OutputTestCode save to test code file with language.
 func (p Problem) OutputTestCode() error {
-	code := p.Codes.Code(p.Language.String())
-	if code == nil {
-		return errors.New("not found the language code")
-	}
-	if err := p.ensureDir(); err != nil {
+	code, err := p.Codes.Code(p.Language)
+	if err != nil {
 		return err
 	}
-	return code.outputTestCode(p.dirName(), p.packageName(), p.Language)
+	if err = p.ensureDir(); err != nil {
+		return err
+	}
+	return code.outputTestCode(p.dirName(), p.packageName())
 }
 
 // String returns a string.
