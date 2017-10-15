@@ -21,7 +21,7 @@ func (l LanguageType) String() string {
 }
 
 const (
-	// golang language
+	// LanguageGo golang language
 	LanguageGo LanguageType = "go"
 )
 

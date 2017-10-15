@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// ICode the Code interface
 type ICode interface {
 	outputCode(dirName, packageName string) error
 	outputTestCode(dirName, packageName string) error
