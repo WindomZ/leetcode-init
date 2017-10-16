@@ -39,13 +39,19 @@ func (p *Problem) Parse() error {
 		return errors.New("can't find the problem")
 	}
 
-	// URL
-	if p.URL == "" {
-		p.URL = fmt.Sprintf(
-			"https://leetcode.com/problems/%s/description/",
-			p.TitleSlug,
-		)
+	// TitleSlug
+	if p.TitleSlug == "" {
+		if strings.HasPrefix(p.URL, "https://leetcode.com/problems/") {
+			p.TitleSlug = p.URL[30:]
+			p.TitleSlug = strings.TrimSpace(p.TitleSlug[:strings.Index(p.TitleSlug, "/")])
+		}
 	}
+
+	// URL
+	p.URL = fmt.Sprintf(
+		"https://leetcode.com/problems/%s/description/",
+		p.TitleSlug,
+	)
 
 	doc, err := goquery.NewDocument(p.URL)
 	if err != nil {
@@ -57,14 +63,6 @@ func (p *Problem) Parse() error {
 func (p *Problem) parseDoc(doc *goquery.Document) (err error) {
 	if err = p.Question.parseDoc(doc); err != nil {
 		return
-	}
-
-	// TitleSlug
-	if p.TitleSlug == "" {
-		if strings.HasPrefix(p.URL, "https://leetcode.com/problems/") {
-			p.TitleSlug = p.URL[30:]
-			p.TitleSlug = strings.TrimSpace(p.TitleSlug[:strings.Index(p.TitleSlug, "/")])
-		}
 	}
 
 	// Id & Title
@@ -119,6 +117,7 @@ func (p Problem) OutputReadMe() error {
 	return path.OverwriteFile(
 		filepath.Join(".", p.dirName(), "README.md"),
 		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
+		fmt.Sprintf("[Description](%s)", p.URL), "",
 		"## Description", "",
 		p.ReadMe(),
 	)
