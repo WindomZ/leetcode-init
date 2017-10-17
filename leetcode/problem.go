@@ -117,8 +117,16 @@ func (p Problem) OutputReadMe() error {
 	return path.OverwriteFile(
 		filepath.Join(".", p.dirName(), "README.md"),
 		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
-		fmt.Sprintf("[Description](%s)", p.URL), "",
-		"## Description", "",
+		fmt.Sprintf("[Description](%s) | ", p.URL),
+		fmt.Sprintf("[Discuss](%s) | ", fmt.Sprintf(
+			"https://leetcode.com/problems/%s/discuss/",
+			p.TitleSlug,
+		)),
+		fmt.Sprintf("[Solution](%s)", fmt.Sprintf(
+			"https://leetcode.com/problems/%s/solution/",
+			p.TitleSlug,
+		)),
+		"", "## Description", "",
 		p.ReadMe(),
 	)
 }
