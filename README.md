@@ -3,6 +3,7 @@
 > A simple cli to creates leetcode code template.
 
 [![Build Status](https://travis-ci.org/WindomZ/leetcode-init.svg?branch=master)](https://travis-ci.org/WindomZ/leetcode-init)
+[![Go Report Card](https://goreportcard.com/badge/github.com/WindomZ/leetcode-init)](https://goreportcard.com/report/github.com/WindomZ/leetcode-init)
 [![GoDoc](https://godoc.org/github.com/WindomZ/leetcode-init/leetcode?status.svg)](https://godoc.org/github.com/WindomZ/leetcode-init/leetcode)
 
 ## Install
