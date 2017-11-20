@@ -1,6 +1,6 @@
 # leetcode-init
 
-> A simple cli to creates leetcode code template.
+> A tool to creates leetcode code template via cli.
 
 [![Build Status](https://travis-ci.org/WindomZ/leetcode-init.svg?branch=master)](https://travis-ci.org/WindomZ/leetcode-init)
 [![Go Report Card](https://goreportcard.com/badge/github.com/WindomZ/leetcode-init)](https://goreportcard.com/report/github.com/WindomZ/leetcode-init)
@@ -54,6 +54,5 @@ If you like it then you can put a :star: on it.
 ## License
 
 [MIT](https://github.com/WindomZ/leetcode-init/blob/master/LICENSE)
-
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWindomZ%2Fleetcode-init.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FWindomZ%2Fleetcode-init?ref=badge_large)
