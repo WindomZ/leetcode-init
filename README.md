@@ -6,6 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/WindomZ/leetcode-init)](https://goreportcard.com/report/github.com/WindomZ/leetcode-init)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![GoDoc](https://godoc.org/github.com/WindomZ/leetcode-init/leetcode?status.svg)](https://godoc.org/github.com/WindomZ/leetcode-init/leetcode)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWindomZ%2Fleetcode-init.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FWindomZ%2Fleetcode-init?ref=badge_shield)
 
 ## Install
 ```bash
@@ -53,3 +54,6 @@ If you like it then you can put a :star: on it.
 ## License
 
 [MIT](https://github.com/WindomZ/leetcode-init/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWindomZ%2Fleetcode-init.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FWindomZ%2Fleetcode-init?ref=badge_large)
