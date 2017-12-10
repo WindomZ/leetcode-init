@@ -23,6 +23,8 @@ func (c CodeGo) outputTestCode(dirName, packageName string) error {
 		filepath.Join(".", dirName, packageName+"_test.go"),
 		"package "+packageName, "", `import "testing"`, "",
 		"func Test_"+mustFindFirstStringSubmatch(`func (.+)\(`,
-			c.DefaultCode)+"(t *testing.T) {", "}",
+			c.DefaultCode)+"(t *testing.T) {", "}", "",
+		"func Benchmark_"+mustFindFirstStringSubmatch(`func (.+)\(`,
+			c.DefaultCode)+"(b *testing.B) {", "}",
 	)
 }

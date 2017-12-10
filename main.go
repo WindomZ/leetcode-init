@@ -7,14 +7,14 @@ import (
 )
 
 const (
-	defaultTitle string = ""
-	defaultURL          = ""
+	defaultTitle = ""
+	defaultURL   = ""
 )
 
 const (
-	usageTitle string = "the title of leetcode problem, without the number."
-	usageURL          = "the url of leetcode problem."
-	usageHelp         = "prints a usage message documenting all defined command-line flags."
+	usageTitle = "the title of leetcode problem, without the number."
+	usageURL   = "the url of leetcode problem."
+	usageHelp  = "prints a usage message documenting all defined command-line flags."
 )
 
 var (
