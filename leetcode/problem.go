@@ -28,9 +28,10 @@ const (
 // Problem the struct of leetcode problem.
 type Problem struct {
 	Question
-	Language    LanguageType
-	Description string `json:"description"`
-	Difficulty  string `json:"difficulty"`
+	Language    LanguageType `json:"language"`
+	Markdown    string       `json:"markdown"`
+	Description string       `json:"description"`
+	Difficulty  string       `json:"difficulty"`
 }
 
 // Parse parses URL and constructs.
@@ -57,7 +58,12 @@ func (p *Problem) Parse() error {
 	if err != nil {
 		return err
 	}
-	return p.parseDoc(doc)
+
+	if err := p.parseDoc(doc); err != nil {
+		return err
+	}
+
+	return p.ensureDir()
 }
 
 func (p *Problem) parseDoc(doc *goquery.Document) (err error) {
@@ -108,9 +114,6 @@ func (p Problem) ensureDir() error {
 
 // OutputReadMe save to README.md.
 func (p Problem) OutputReadMe() error {
-	if err := p.ensureDir(); err != nil {
-		return err
-	}
 	if p.ID == "" || p.Title == "" {
 		return errors.New("not found the language description")
 	}
@@ -137,9 +140,6 @@ func (p Problem) OutputCode() error {
 	if err != nil {
 		return err
 	}
-	if err = p.ensureDir(); err != nil {
-		return err
-	}
 	return code.outputCode(p.dirName(), p.packageName())
 }
 
@@ -149,10 +149,15 @@ func (p Problem) OutputTestCode() error {
 	if err != nil {
 		return err
 	}
-	if err = p.ensureDir(); err != nil {
-		return err
-	}
 	return code.outputTestCode(p.dirName(), p.packageName())
+}
+
+// OutputMarkdown prints markdown template.
+func (p Problem) OutputMarkdown() error {
+	if p.Markdown == "" {
+		return nil
+	}
+	return NewMarkdown(p.Markdown, p).outputMarkdown()
 }
 
 // String returns a string.
@@ -162,18 +167,19 @@ func (p Problem) String() string {
 }
 
 // NewProblem returns new Problem instance with a url string.
-func NewProblem(lang LanguageType, uri string) *Problem {
+func NewProblem(lang LanguageType, uri, markdown string) *Problem {
 	return &Problem{
 		Question: Question{
 			URL: fmt.Sprintf("https://leetcode.com/problems/%s/description/",
 				mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri)),
 		},
 		Language: lang,
+		Markdown: markdown,
 	}
 }
 
 // NewProblemByTitle returns new Problem instance with a title string.
-func NewProblemByTitle(lang LanguageType, title string) *Problem {
+func NewProblemByTitle(lang LanguageType, title, markdown string) *Problem {
 	title = strings.Replace(strings.TrimSpace(strings.ToLower(title)),
 		" ", "-", -1)
 	return &Problem{
@@ -181,5 +187,6 @@ func NewProblemByTitle(lang LanguageType, title string) *Problem {
 			TitleSlug: title,
 		},
 		Language: lang,
+		Markdown: markdown,
 	}
 }

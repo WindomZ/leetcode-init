@@ -7,39 +7,39 @@ import (
 )
 
 const (
-	defaultTitle = ""
-	defaultURL   = ""
-)
-
-const (
-	usageTitle = "the title of leetcode problem, without the number."
-	usageURL   = "the url of leetcode problem."
-	usageHelp  = "prints a usage message documenting all defined command-line flags."
+	usageTitle    = "the title of leetcode problem, without the number."
+	usageURL      = "the url of leetcode problem."
+	usageMarkdown = "load and rendering markdown template, prints output."
+	usageHelp     = "prints a usage message documenting all defined command-line flags."
 )
 
 var (
-	titleFlag = flag.String("title", defaultTitle, usageTitle)
-	urlFlag   = flag.String("url", defaultURL, usageURL)
-	helpFlag  = flag.Bool("help", false, usageHelp)
+	titleFlag    string
+	urlFlag      string
+	markdownFlag string
+	helpFlag     bool
 )
 
 func main() {
-	flag.StringVar(titleFlag, "t", defaultTitle, usageTitle)
-	flag.StringVar(urlFlag, "u", defaultURL, usageURL)
-	flag.BoolVar(helpFlag, "h", false, usageHelp)
+	flag.StringVar(&titleFlag, "t", "", usageTitle)
+	flag.StringVar(&urlFlag, "u", "", usageURL)
+	flag.StringVar(&markdownFlag, "m", "", usageMarkdown)
+	flag.BoolVar(&helpFlag, "h", false, usageHelp)
 
 	flag.Parse()
 
-	if *helpFlag {
+	if helpFlag {
 		flag.Usage()
 		return
 	}
 
 	var problem *leetcode.Problem
-	if *urlFlag != "" {
-		problem = leetcode.NewProblem(leetcode.LanguageGo, *urlFlag)
-	} else if *titleFlag != "" {
-		problem = leetcode.NewProblemByTitle(leetcode.LanguageGo, *titleFlag)
+	if urlFlag != "" {
+		problem = leetcode.NewProblem(leetcode.LanguageGo,
+			urlFlag, markdownFlag)
+	} else if titleFlag != "" {
+		problem = leetcode.NewProblemByTitle(leetcode.LanguageGo,
+			titleFlag, markdownFlag)
 	} else {
 		flag.Usage()
 		return
@@ -56,6 +56,9 @@ func main() {
 		panic(err)
 	}
 	if err := problem.OutputTestCode(); err != nil {
+		panic(err)
+	}
+	if err := problem.OutputMarkdown(); err != nil {
 		panic(err)
 	}
 }
