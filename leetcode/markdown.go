@@ -1,8 +1,11 @@
 package leetcode
 
 import (
-	"os"
+	"bytes"
+	"path/filepath"
 	"text/template"
+
+	"github.com/WindomZ/go-develop-kit/path"
 )
 
 // Markdown the struct of leetcode markdown template manager.
@@ -35,7 +38,9 @@ func (m Markdown) outputMarkdown() error {
 	if err != nil {
 		return err
 	}
-	return t.Execute(os.Stdout, &MarkdownFragments{
+
+	var buff bytes.Buffer
+	if err := t.Execute(&buff, &MarkdownFragments{
 		ID:          m.Problem.ID,
 		TitleSlug:   m.Problem.TitleSlug,
 		Title:       m.Problem.Title,
@@ -43,5 +48,12 @@ func (m Markdown) outputMarkdown() error {
 		Difficulty:  m.Problem.Difficulty,
 		DirName:     m.Problem.dirName(),
 		PackageName: m.Problem.packageName(),
-	})
+	}); err != nil {
+		return err
+	}
+
+	return path.OverwriteFile(
+		filepath.Join(".", m.Problem.dirName(), "TEMPLATE.md"),
+		buff.String(),
+	)
 }

@@ -9,7 +9,7 @@ import (
 const (
 	usageTitle    = "the title of leetcode problem, without the number."
 	usageURL      = "the url of leetcode problem."
-	usageMarkdown = "load and rendering markdown template, prints output."
+	usageMarkdown = "load and rendering markdown template, and save to TEMPLATE.md."
 	usageHelp     = "prints a usage message documenting all defined command-line flags."
 )
 
