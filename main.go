@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	usageTitle    = "the title of leetcode problem, without the number."
+	usageTitle    = "the url keyword of leetcode problem, such as: 'plus-one'"
 	usageURL      = "the url of leetcode problem."
 	usageMarkdown = "load and rendering markdown template, and save to TEMPLATE.md."
 	usageHelp     = "prints a usage message documenting all defined command-line flags."
