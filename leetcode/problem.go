@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/WindomZ/go-develop-kit/path"
 	"github.com/lunny/html2md"
 )
@@ -22,90 +21,46 @@ func (l LanguageType) String() string {
 
 const (
 	// LanguageGo golang language
-	LanguageGo LanguageType = "go"
+	LanguageGo LanguageType = "golang"
 )
 
 // Problem the struct of leetcode problem.
 type Problem struct {
-	Question
-	Language    LanguageType `json:"language"`
-	Markdown    string       `json:"markdown"`
-	Description string       `json:"description"`
-	Difficulty  string       `json:"difficulty"`
+	Question Question
+	Language LanguageType `json:"language"`
+	Markdown string       `json:"markdown"`
 }
 
 // Parse parses URL and constructs.
 func (p *Problem) Parse() error {
-	if p.URL == "" && p.TitleSlug == "" {
+	if p.Question.TitleSlug == "" {
 		return errors.New("can't find the problem")
 	}
 
-	// TitleSlug
-	if p.TitleSlug == "" {
-		if strings.HasPrefix(p.URL, "https://leetcode.com/problems/") {
-			p.TitleSlug = p.URL[30:]
-			p.TitleSlug = strings.TrimSpace(p.TitleSlug[:strings.Index(p.TitleSlug, "/")])
-		}
-	}
-
-	// URL
-	p.URL = fmt.Sprintf(
-		"https://leetcode.com/problems/%s/description/",
-		p.TitleSlug,
-	)
-
-	doc, err := goquery.NewDocument(p.URL)
-	if err != nil {
+	if err := p.Question.Parse(); err != nil {
 		return err
 	}
 
-	if err := p.parseDoc(doc); err != nil {
-		return err
+	if !p.Question.Valid() {
+		return errors.New("can't parse to a question")
 	}
 
 	return p.ensureDir()
 }
 
-func (p *Problem) parseDoc(doc *goquery.Document) (err error) {
-	if err = p.Question.parseDoc(doc); err != nil {
-		return
-	}
-
-	// Id & Title
-	if p.Title == "" {
-		p.Title = doc.Find(".question-title .row h3").First().Text()
-		if p.Title != "" {
-			idx := strings.Index(p.Title, ".")
-			p.ID = strings.TrimSpace(p.Title[:idx])
-			p.Title = strings.TrimSpace(p.Title[idx+1:])
-		}
-	}
-
-	// Description
-	p.Description, err = doc.Find("div.question-description").First().Html()
-	if err != nil {
-		return
-	}
-	p.Description = strings.TrimSpace(p.Description)
-
-	// Difficulty
-	p.Difficulty = doc.Find("span.difficulty-label").First().Text()
-	p.Difficulty = strings.TrimSpace(p.Difficulty)
-
-	return
-}
-
 // ReadMe convert description to markdown.
 func (p Problem) ReadMe() string {
-	return html2md.Convert(p.Description)
+	return html2md.Convert(p.Question.Content)
 }
 
 func (p Problem) dirName() string {
-	return strings.ToLower(strings.Replace(p.TitleSlug, "-", "_", -1))
+	return strings.ToLower(strings.Replace(p.Question.TitleSlug,
+		"-", "_", -1))
 }
 
 func (p Problem) packageName() string {
-	return strings.ToLower(strings.Replace(p.TitleSlug, "-", "", -1))
+	return strings.ToLower(strings.Replace(p.Question.TitleSlug,
+		"-", "", -1))
 }
 
 func (p Problem) ensureDir() error {
@@ -114,20 +69,20 @@ func (p Problem) ensureDir() error {
 
 // OutputReadMe save to README.md.
 func (p Problem) OutputReadMe() error {
-	if p.ID == "" || p.Title == "" {
+	if !p.Question.Valid() {
 		return errors.New("not found the language description")
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", p.dirName(), "README.md"),
-		fmt.Sprintf("# %s. %s", p.ID, p.Title), "",
-		fmt.Sprintf("[Description](%s) | ", p.URL),
+		fmt.Sprintf("# %s. %s", p.Question.QuestionId, p.Question.QuestionTitle), "",
+		fmt.Sprintf("[Description](%s) | ", p.Question.Referer),
 		fmt.Sprintf("[Discuss](%s) | ", fmt.Sprintf(
 			"https://leetcode.com/problems/%s/discuss/",
-			p.TitleSlug,
+			p.Question.TitleSlug,
 		)),
 		fmt.Sprintf("[Solution](%s)", fmt.Sprintf(
 			"https://leetcode.com/problems/%s/solution/",
-			p.TitleSlug,
+			p.Question.TitleSlug,
 		)),
 		"", "## Description", "",
 		p.ReadMe(),
@@ -136,7 +91,7 @@ func (p Problem) OutputReadMe() error {
 
 // OutputCode save to src code file with language.
 func (p Problem) OutputCode() error {
-	code, err := p.Codes.Code(p.Language)
+	code, err := p.Question.Code(p.Language)
 	if err != nil {
 		return err
 	}
@@ -145,7 +100,7 @@ func (p Problem) OutputCode() error {
 
 // OutputTestCode save to test code file with language.
 func (p Problem) OutputTestCode() error {
-	code, err := p.Codes.Code(p.Language)
+	code, err := p.Question.Code(p.Language)
 	if err != nil {
 		return err
 	}
@@ -170,8 +125,7 @@ func (p Problem) String() string {
 func NewProblem(lang LanguageType, uri, markdown string) *Problem {
 	return &Problem{
 		Question: Question{
-			URL: fmt.Sprintf("https://leetcode.com/problems/%s/description/",
-				mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri)),
+			TitleSlug: mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri),
 		},
 		Language: lang,
 		Markdown: markdown,

@@ -41,11 +41,11 @@ func (m Markdown) outputMarkdown() error {
 
 	var buff bytes.Buffer
 	if err := t.Execute(&buff, &MarkdownFragments{
-		ID:          m.Problem.ID,
-		TitleSlug:   m.Problem.TitleSlug,
-		Title:       m.Problem.Title,
+		ID:          m.Problem.Question.QuestionId,
+		TitleSlug:   m.Problem.Question.TitleSlug,
+		Title:       m.Problem.Question.QuestionTitle,
 		Language:    m.Problem.Language.String(),
-		Difficulty:  m.Problem.Difficulty,
+		Difficulty:  m.Problem.Question.Difficulty,
 		DirName:     m.Problem.dirName(),
 		PackageName: m.Problem.packageName(),
 	}); err != nil {

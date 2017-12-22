@@ -4,11 +4,12 @@ import (
 	"path/filepath"
 
 	"github.com/WindomZ/go-develop-kit/path"
+	"github.com/WindomZ/leetcode-graphql"
 )
 
 // CodeGo the struct of leetcode codes.
 type CodeGo struct {
-	Code
+	leetcodegraphql.Code
 }
 
 func (c CodeGo) outputCode(dirName, packageName string) error {
