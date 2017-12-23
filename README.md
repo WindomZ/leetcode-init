@@ -34,6 +34,23 @@ Then, a directory(name `twosum`) is generated under the current path.
     └── twosum_test.go
 ```
 
+If with `-m TEMPLATE.md`:
+
+```bash
+leetcode-init -t two-sum -m TEMPLATE.md
+```
+
+loads `TEMPLATE.md` file and renders it in the directory.
+
+```
+.
+└── twosum
+    ├── README.md
+    ├── TEMPLATE.md
+    ├── twosum.go
+    └── twosum_test.go
+```
+
 ## Related
 
 - [WindomZ/leetcode.go](https://github.com/WindomZ/leetcode.go) LeetCode Problem's Solutions(Golang).
