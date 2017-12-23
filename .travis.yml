@@ -6,7 +6,7 @@ go: master
 
 before_install:
   - go get github.com/WindomZ/go-develop-kit/path
-  - go get github.com/PuerkitoBio/goquery
+  - go get github.com/WindomZ/leetcode-graphql
   - go get github.com/lunny/html2md
   - go get github.com/WindomZ/testify/assert
   - go get github.com/mattn/goveralls
