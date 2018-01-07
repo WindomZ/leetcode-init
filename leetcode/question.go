@@ -2,6 +2,7 @@ package leetcode
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/WindomZ/leetcode-graphql"
 )
@@ -14,7 +15,13 @@ type Question struct {
 
 // Parse parses the response to constructs.
 func (q *Question) Parse() error {
-	return q.Do(q.TitleSlug)
+	if err := q.Do(q.TitleSlug); err != nil {
+		return err
+	}
+	q.TitleSlug = strings.Replace(strings.
+		TrimSpace(strings.ToLower(q.QuestionTitle)),
+		" ", "-", -1)
+	return nil
 }
 
 // String returns a string.

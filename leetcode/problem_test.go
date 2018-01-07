@@ -6,7 +6,7 @@ import (
 	"github.com/WindomZ/testify/assert"
 )
 
-var testProblem = NewProblem(
+var testProblem = NewProblemByURI(
 	LanguageGo,
 	"https://leetcode.com/problems/two-sum/description/",
 	"",

@@ -7,21 +7,23 @@ import (
 )
 
 const (
-	usageTitle    = "the url keyword of leetcode problem, such as: 'plus-one'"
+	usageKey      = "the keyword of leetcode problem, such as: '1', 'two-sum', 'Two Sum'"
+	usageTitle    = "the title of leetcode problem, such as: 'two-sum', 'Two Sum'"
 	usageURL      = "the url of leetcode problem."
 	usageMarkdown = "load and rendering markdown template, and save to TEMPLATE.md."
 	usageHelp     = "prints a usage message documenting all defined command-line flags."
 )
 
 var (
-	titleFlag    string
+	keyFlag      string
 	urlFlag      string
 	markdownFlag string
 	helpFlag     bool
 )
 
 func main() {
-	flag.StringVar(&titleFlag, "t", "", usageTitle)
+	flag.StringVar(&keyFlag, "k", "", usageKey)
+	flag.StringVar(&keyFlag, "t", "", usageTitle)
 	flag.StringVar(&urlFlag, "u", "", usageURL)
 	flag.StringVar(&markdownFlag, "m", "", usageMarkdown)
 	flag.BoolVar(&helpFlag, "h", false, usageHelp)
@@ -35,11 +37,11 @@ func main() {
 
 	var problem *leetcode.Problem
 	if urlFlag != "" {
-		problem = leetcode.NewProblem(leetcode.LanguageGo,
+		problem = leetcode.NewProblemByURI(leetcode.LanguageGo,
 			urlFlag, markdownFlag)
-	} else if titleFlag != "" {
-		problem = leetcode.NewProblemByTitle(leetcode.LanguageGo,
-			titleFlag, markdownFlag)
+	} else if keyFlag != "" {
+		problem = leetcode.NewProblem(leetcode.LanguageGo,
+			keyFlag, markdownFlag)
 	} else {
 		flag.Usage()
 		return

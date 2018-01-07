@@ -121,8 +121,8 @@ func (p Problem) String() string {
 	return string(b)
 }
 
-// NewProblem returns new Problem instance with a url string.
-func NewProblem(lang LanguageType, uri, markdown string) *Problem {
+// NewProblemByURI returns new Problem instance with a url string.
+func NewProblemByURI(lang LanguageType, uri, markdown string) *Problem {
 	return &Problem{
 		Question: Question{
 			TitleSlug: mustFindFirstStringSubmatch("leetcode.com/problems/([^/]+)", uri),
@@ -132,13 +132,11 @@ func NewProblem(lang LanguageType, uri, markdown string) *Problem {
 	}
 }
 
-// NewProblemByTitle returns new Problem instance with a title string.
-func NewProblemByTitle(lang LanguageType, title, markdown string) *Problem {
-	title = strings.Replace(strings.TrimSpace(strings.ToLower(title)),
-		" ", "-", -1)
+// NewProblem returns new Problem instance with a title string.
+func NewProblem(lang LanguageType, key, markdown string) *Problem {
 	return &Problem{
 		Question: Question{
-			TitleSlug: title,
+			TitleSlug: key,
 		},
 		Language: lang,
 		Markdown: markdown,
