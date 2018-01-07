@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/WindomZ/leetcode-init/leetcode"
 )
@@ -12,6 +14,7 @@ const (
 	usageURL      = "the url of leetcode problem."
 	usageMarkdown = "load and rendering markdown template, and save to TEMPLATE.md."
 	usageHelp     = "prints a usage message documenting all defined command-line flags."
+	usageVersion  = "prints version information."
 )
 
 var (
@@ -19,6 +22,7 @@ var (
 	urlFlag      string
 	markdownFlag string
 	helpFlag     bool
+	versionFlag  bool
 )
 
 func main() {
@@ -27,11 +31,17 @@ func main() {
 	flag.StringVar(&urlFlag, "u", "", usageURL)
 	flag.StringVar(&markdownFlag, "m", "", usageMarkdown)
 	flag.BoolVar(&helpFlag, "h", false, usageHelp)
+	flag.BoolVar(&versionFlag, "v", false, usageVersion)
 
 	flag.Parse()
 
 	if helpFlag {
 		flag.Usage()
+		return
+	}
+
+	if versionFlag {
+		fmt.Fprintf(os.Stderr, "%s version: v1.0.0\n", os.Args[0])
 		return
 	}
 
