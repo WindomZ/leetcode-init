@@ -74,18 +74,14 @@ func (p Problem) OutputReadMe() error {
 	}
 	return path.OverwriteFile(
 		filepath.Join(".", p.dirName(), "README.md"),
-		fmt.Sprintf("# %s. %s", p.Question.QuestionId, p.Question.QuestionTitle), "",
-		fmt.Sprintf("[Description](%s) | ", p.Question.Referer),
-		fmt.Sprintf("[Discuss](%s) | ", fmt.Sprintf(
-			"https://leetcode.com/problems/%s/discuss/",
-			p.Question.TitleSlug,
-		)),
-		fmt.Sprintf("[Solution](%s)", fmt.Sprintf(
-			"https://leetcode.com/problems/%s/solution/",
-			p.Question.TitleSlug,
-		)),
-		"", "## Description", "",
-		p.ReadMe(),
+		fmt.Sprintf("# [%s. %s](%s)",
+			p.Question.QuestionId, p.Question.QuestionTitle, p.Question.Referer), "",
+		"## Description", "",
+		p.ReadMe(), "",
+		"## Solution",
+		fmt.Sprintf("- [Code](%s.go)", p.packageName()),
+		fmt.Sprintf("- [Testing](%s_test.go)", p.packageName()), "",
+		"## Note", "- [English](NOTE.md)", "- [中文](NOTE_Ch-zh.md)",
 	)
 }
 
