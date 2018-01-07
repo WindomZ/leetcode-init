@@ -41,7 +41,7 @@ func main() {
 	}
 
 	if versionFlag {
-		fmt.Fprintf(os.Stderr, "%s version: v1.0.0\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "%s version: v1.1.0\n", os.Args[0])
 		return
 	}
 
