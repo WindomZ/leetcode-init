@@ -17,9 +17,11 @@ go get -u github.com/WindomZ/leetcode-init/...
 Take the first problem([1. Two Sum](https://leetcode.com/problems/two-sum/description/)) for example: 
 
 ```bash
-leetcode-init -t 'Two Sum'
+leetcode-init -k 1
 # or
-leetcode-init -t two-sum
+leetcode-init -k two-sum
+# or
+leetcode-init -k 'Two Sum'
 # or
 leetcode-init -u 'https://leetcode.com/problems/two-sum'
 ```
