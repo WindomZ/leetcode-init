@@ -41,7 +41,7 @@ func (m Markdown) outputMarkdown() error {
 
 	var buff bytes.Buffer
 	if err := t.Execute(&buff, &MarkdownFragments{
-		ID:          m.Problem.Question.QuestionId,
+		ID:          m.Problem.Question.QuestionID,
 		TitleSlug:   m.Problem.Question.TitleSlug,
 		Title:       m.Problem.Question.QuestionTitle,
 		Language:    m.Problem.Language.String(),

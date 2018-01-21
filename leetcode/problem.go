@@ -75,7 +75,7 @@ func (p Problem) OutputReadMe() error {
 	return path.OverwriteFile(
 		filepath.Join(".", p.dirName(), "README.md"),
 		fmt.Sprintf("# [%s. %s](%s)",
-			p.Question.QuestionId, p.Question.QuestionTitle, p.Question.Referer), "",
+			p.Question.QuestionID, p.Question.QuestionTitle, p.Question.Referer), "",
 		"## Description", "",
 		p.ReadMe(), "",
 		"## Solution",
